@@ -5,12 +5,12 @@
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
-Version:	1.12
+Version:	1.13
 Release:	1
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	2d761503025a84758b289564e390c7c8
+# Source0-md5:	6e7bfc52bc273ebeb057c7cb21357c5b
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-DESTDIR.patch
 Patch2:		%{name}-gettext.patch
@@ -28,7 +28,6 @@ BuildRequires:	libpng-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
 
 %description
 VICE is a Versatile Commodore Emulator, i.e. a program that runs on a
