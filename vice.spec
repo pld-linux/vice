@@ -89,7 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS Chan* FEEDBACK NEWS README 
+%doc AUTHORS Chan* FEEDBACK NEWS README
 %attr(0755,root,root) %{_bindir}/*
 %{_libdir}/vice
 %{_mandir}/man?/*
