@@ -1,3 +1,7 @@
+#
+# Conditional build:
+# bcond_off_gnome - without GNOME support
+#
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
@@ -19,7 +23,7 @@ BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
 BuildRequires:	gettext-devel
-BuildRequires:	gnome-libs-devel
+%{!?bcond_off_gnome:BuildRequires:	gnome-libs-devel}
 BuildRequires:	libpng-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
@@ -46,7 +50,7 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %patch0 -p1
 
 %build
-rm missing
+rm -f missing
 gettextize --copy --force
 aclocal
 autoconf
@@ -58,7 +62,7 @@ automake -a -c
 	--with-x \
 	--enable-fullscreen \
 	--without-xaw3d \
-	--enable-gnomeui \
+	%{!?bcond_off_gnome:--enable-gnomeui} \
 	--enable-nls \
 	--without-included-gettext
 %{__make}
