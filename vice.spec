@@ -13,7 +13,7 @@ Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{versi
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-DESTDIR.patch
 Patch2:		%{name}-acamfixes.patch
-URL:		http://www.cs.cmu.edu/~dsladic/vice/vice.html
+URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
