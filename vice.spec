@@ -42,7 +42,8 @@ of line anyway) and the CBM-II (aka C610).
 %description -l pl
 VICE jest wszechstronnym emulatorem 8-bitowego komputera Commodore.
 Aktualna wersja emuluje C64, C128 (wraz z trybem pracy 80 kolumnowym),
-VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
+VIC20, wszystkie modele PET (poza SuperPET 9000, który zreszt± nie
+pasowa³ do tej linii) oraz CBM-II (C610).
 
 %prep
 %setup -q
@@ -79,7 +80,7 @@ perl -i -pe 's/SUBDIRS = html\n//' doc/Makefile
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-gzip -9 $RPM_BUILD_ROOT%{_fontsdir}/misc/*
+gzip -9n $RPM_BUILD_ROOT%{_fontsdir}/misc/*
 rm -f doc/html/{Makefile*,texi2html}
 rm -rf $RPM_BUILD_ROOT%{_datadir}/vice/doc
 ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
@@ -100,7 +101,7 @@ fontpostinst misc
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/mon.txt doc/html
-%attr(0755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/*
 %{_datadir}/vice
 %{_fontsdir}/misc/*
 %{_mandir}/man?/*
