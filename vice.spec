@@ -5,8 +5,8 @@
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
-Version:	1.9
-Release:	2
+Version:	1.11
+Release:	1
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
@@ -17,8 +17,8 @@ URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
-#BuildRequires:	autoconf
-#BuildRequires:	automake
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
@@ -50,8 +50,9 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 #%patch2 -p1
 
 %build
-rm -f missing
-%{__gettextize}
+install %{_datadir}/automake/config.* .
+#rm -f missing
+#{__gettextize}
 #%{__aclocal}
 #%{__autoconf}
 #%{__autoheader}
