@@ -103,6 +103,7 @@ cd src/arch/unix/x11
 for i in *icon.c; do
 	install $i $RPM_BUILD_ROOT%{_pixmapsdir}/${i%.c}.xpm
 done
+cd ../../../..
 
 %find_lang %{name}
 
