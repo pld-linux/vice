@@ -9,8 +9,6 @@ Version:	1.6
 Release:	3
 License:	GPL
 Group:		Applications/Emulators
-Group(de):	Applikationen/Emulators
-Group(pl):	Aplikacje/Emulatory
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
 Patch0:		%{name}-info.patch
 URL:		http://www.cs.cmu.edu/~dsladic/vice/vice.html
