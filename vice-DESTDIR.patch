@@ -1,8 +1,17 @@
---- vice-1.8/data/fonts/Makefile.am.orig	Mon Mar 20 01:27:23 2000
-+++ vice-1.8/data/fonts/Makefile.in	Sat Mar 30 10:15:21 2002
-@@ -7,7 +7,7 @@
+--- vice-1.12/data/fonts/Makefile.am.orig	2002-08-03 16:09:51.000000000 +0200
++++ vice-1.12/data/fonts/Makefile.am	2003-07-20 21:52:30.000000000 +0200
+@@ -1,14 +1,13 @@
+ fontsdir = $(prefix)/lib/vice/fonts
  
- install: 
+ fonts_DATA = \
+-	cbm-directory-charset.fon \
+ 	vice-cbm.bdf
+ 
+-EXTRA_DIST = $(fonts_DATA)
++EXTRA_DIST = $(fonts_DATA) cbm-directory-charset.fon
+ 
+-install: 
++install-data-hook: 
  	@echo "Preparing fontdir..." ; \
 -	cd $(prefix)/lib/vice/fonts ; \
 +	cd $(DESTDIR)$(prefix)/lib/vice/fonts ; \

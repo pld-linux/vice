@@ -5,15 +5,15 @@
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
-Version:	1.11
+Version:	1.12
 Release:	1
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	580817b28097b0897e48463d4fc510aa
+# Source0-md5:	2d761503025a84758b289564e390c7c8
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-DESTDIR.patch
-Patch2:		%{name}-acamfixes.patch
+Patch2:		%{name}-gettext.patch
 URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
@@ -48,20 +48,18 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %setup -q
 %patch0 -p1
 %patch1 -p1
-#%patch2 -p1
+%patch2 -p1
 
 %build
-install %{_datadir}/automake/config.* .
-#rm -f missing
-#{__gettextize}
-#%%{__aclocal}
-#%%{__autoconf}
-#%%{__autoheader}
-#%%{__automake}
-#cd src/resid
-#%%{__autoconf}
-#cd ../..
-%configure2_13 \
+%{__gettextize}
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
+cd src/resid
+%{__autoconf}
+cd ../..
+%configure \
 	--enable-autobpp \
 	--with-sdl \
 	--with-x \
@@ -78,6 +76,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%find_lang %{name}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -87,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS Chan* FEEDBACK NEWS README 
 %attr(0755,root,root) %{_bindir}/*
