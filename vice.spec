@@ -6,7 +6,7 @@ Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
 Version:	1.9
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
@@ -17,8 +17,8 @@ URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
-BuildRequires:	automake
-BuildRequires:	autoconf
+#BuildRequires:	autoconf
+#BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
@@ -54,16 +54,13 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %build
 rm -f missing
 %{__gettextize}
-#aclocal
-#autoconf
-#autoheader
-#automake -a -c -f
+#%{__aclocal}
+#%{__autoconf}
+#%{__autoheader}
+#%{__automake}
 #cd src/resid
-#autoconf
+#%{__autoconf}
 #cd ../..
-if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
-	CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
-fi
 %configure2_13 \
 	--enable-autobpp \
 	--with-sdl \
@@ -81,8 +78,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-gzip -9nf AUTHORS  Chan* FEEDBACK NEWS README 
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -94,7 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc AUTHORS Chan* FEEDBACK NEWS README 
 %attr(0755,root,root) %{_bindir}/*
 %{_libdir}/vice
 %{_mandir}/man?/*
