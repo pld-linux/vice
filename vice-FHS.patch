@@ -73,22 +73,25 @@ diff -urN vice-1.16.orig/data/DRIVES/Makefile.am vice-1.16/data/DRIVES/Makefile.
 diff -urN vice-1.16.orig/data/fonts/Makefile.am vice-1.16/data/fonts/Makefile.am
 --- vice-1.16.orig/data/fonts/Makefile.am	2003-11-08 14:34:41.000000000 +0100
 +++ vice-1.16/data/fonts/Makefile.am	2005-02-06 12:08:27.000000000 +0100
-@@ -1,4 +1,4 @@
+@@ -1,14 +1,12 @@
 -fontsdir = $(prefix)/lib/vice/fonts
-+fontsdir = $(datadir)/vice/fonts
++fontsdir = $(datadir)/fonts/misc
  
  fonts_DATA = \
- 	cbm-directory-charset.fon \
-@@ -8,7 +8,7 @@
+-	cbm-directory-charset.fon \
+ 	vice-cbm.bdf
+ 
+-EXTRA_DIST = $(fonts_DATA)
++EXTRA_DIST = $(fonts_DATA) cbm-directory-charset.fon
  
  install: install-data-am
  	@echo "Preparing fontdir..." ; \
 -	cd $(DESTDIR)$(prefix)/lib/vice/fonts ; \
-+	cd $(DESTDIR)$(datadir)/vice/fonts ; \
++	cd $(DESTDIR)$(datadir)/fonts/misc ; \
  	bdftopcf -o vice-cbm.pcf vice-cbm.bdf ; \
- 	rm vice-cbm.bdf ; \
- 	mkfontdir .
-Files vice-1.16.orig/data/fonts/vice-cbm.pcf and vice-1.16/data/fonts/vice-cbm.pcf differ
+-	rm vice-cbm.bdf ; \
+-	mkfontdir .
++	rm vice-cbm.bdf
 diff -urN vice-1.16.orig/data/PET/Makefile.am vice-1.16/data/PET/Makefile.am
 --- vice-1.16.orig/data/PET/Makefile.am	2004-12-19 19:46:18.000000000 +0100
 +++ vice-1.16/data/PET/Makefile.am	2005-02-06 12:08:40.000000000 +0100
