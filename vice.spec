@@ -49,19 +49,19 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 
 %build
 rm -f missing
 gettextize --copy --force
-aclocal
-autoconf
-autoheader
-automake -a -c -f
-cd src/resid
-autoconf
-cd ../..
-%configure \
+#aclocal
+#autoconf
+#autoheader
+#automake -a -c -f
+#cd src/resid
+#autoconf
+#cd ../..
+%configure2_13 \
 	--enable-autobpp \
 	--with-sdl \
 	--with-x \
