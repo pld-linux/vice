@@ -5,8 +5,8 @@
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
-Version:	1.6
-Release:	3
+Version:	1.8
+Release:	1
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
@@ -69,9 +69,9 @@ gettextize --copy --force
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	prefix=$RPM_BUILD_ROOT
 
-gzip -9nf AUTHORS BUGS Chan* FEEDBACK NEWS README TODO
+gzip -9nf AUTHORS  Chan* FEEDBACK NEWS README 
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
