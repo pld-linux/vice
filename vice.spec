@@ -17,8 +17,8 @@ URL:		http://www.cs.cmu.edu/~dsladic/vice/vice.html
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
-BuildRequires:	automake
-BuildRequires:	autoconf
+#BuildRequires:	automake
+#BuildRequires:	autoconf
 BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
