@@ -53,7 +53,7 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 
 %build
 rm -f missing
-gettextize --copy --force
+%{__gettextize}
 #aclocal
 #autoconf
 #autoheader
