@@ -17,7 +17,6 @@ Patch2:		%{name}-gettext.patch
 URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
-BuildRequires:	Xaw3d-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -62,12 +61,12 @@ cd ../..
 %configure \
 	--enable-autobpp \
 	--with-sdl \
-	--with-x \
 	--enable-fullscreen \
-	--without-xaw3d \
 	%{!?_without_gnome:--enable-gnomeui} \
 	--enable-nls \
-	--without-included-gettext
+	--without-xaw3d \
+	--without-included-gettext \
+	--with-x
 %{__make}
 
 %install
