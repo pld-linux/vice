@@ -1,0 +1,11 @@
+--- vice-1.8/data/fonts/Makefile.am.orig	Mon Mar 20 01:27:23 2000
++++ vice-1.8/data/fonts/Makefile.am	Sat Mar 30 10:15:21 2002
+@@ -7,7 +7,7 @@
+ 
+ install: 
+ 	@echo "Preparing fontdir..." ; \
+-	cd $(prefix)/lib/vice/fonts ; \
++	cd $(DESTDIR)$(prefix)/lib/vice/fonts ; \
+ 	bdftopcf -o vice-cbm.pcf vice-cbm.bdf ; \
+ 	rm vice-cbm.bdf ; \
+ 	mkfontdir .

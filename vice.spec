@@ -11,12 +11,14 @@ License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
 Patch0:		%{name}-info.patch
+Patch1:		%{name}-DESTDIR.patch
+Patch2:		%{name}-acamfixes.patch
 URL:		http://www.cs.cmu.edu/~dsladic/vice/vice.html
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
-#BuildRequires:	automake
-#BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	autoconf
 BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
@@ -46,15 +48,20 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 rm -f missing
 gettextize --copy --force
-#aclocal
-#autoconf
-#autoheader
-#automake -a -c
-%configure2_13 \
+aclocal
+autoconf
+autoheader
+automake -a -c -f
+cd src/resid
+autoconf
+cd ../..
+%configure \
 	--enable-autobpp \
 	--with-sdl \
 	--with-x \
@@ -68,9 +75,13 @@ gettextize --copy --force
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} prefix=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 gzip -9nf AUTHORS  Chan* FEEDBACK NEWS README 
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
@@ -78,13 +89,10 @@ gzip -9nf AUTHORS  Chan* FEEDBACK NEWS README
 %postun
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(644,root,root,755)
 %doc *.gz
 %attr(0755,root,root) %{_bindir}/*
 %{_libdir}/vice
 %{_mandir}/man?/*
-%{_infodir}/*info*
+%{_infodir}/*.info*
