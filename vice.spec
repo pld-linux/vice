@@ -6,7 +6,7 @@ Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
 Version:	1.6
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Emulators
 Group(de):	Applikationen/Emulators
@@ -52,11 +52,11 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %build
 rm -f missing
 gettextize --copy --force
-aclocal
-autoconf
-autoheader
-automake -a -c
-%configure \
+#aclocal
+#autoconf
+#autoheader
+#automake -a -c
+%configure2_13 \
 	--enable-autobpp \
 	--with-sdl \
 	--with-x \
