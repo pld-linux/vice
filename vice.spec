@@ -1,6 +1,6 @@
 #
 # Conditional build:
-# bcond_off_gnome - without GNOME support
+# _without_gnome - without GNOME support
 #
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
@@ -23,7 +23,7 @@ BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
 BuildRequires:	gettext-devel
-%{!?bcond_off_gnome:BuildRequires:	gnome-libs-devel}
+%{!?_without_gnome:BuildRequires:	gnome-libs-devel}
 BuildRequires:	libpng-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
@@ -62,7 +62,7 @@ automake -a -c
 	--with-x \
 	--enable-fullscreen \
 	--without-xaw3d \
-	%{!?bcond_off_gnome:--enable-gnomeui} \
+	%{!?_without_gnome:--enable-gnomeui} \
 	--enable-nls \
 	--without-included-gettext
 %{__make}
