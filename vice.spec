@@ -5,7 +5,7 @@
 Summary:	Commodore emulator
 Summary(pl):	Emulator Commodore
 Name:		vice
-Version:	1.8
+Version:	1.9
 Release:	1
 License:	GPL
 Group:		Applications/Emulators
