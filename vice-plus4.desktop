@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VICE PLUS4 emulator
+Name[pl]=Emulator PLUS4 VICE
+Icon=plus4icon
+Exec=xplus4
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Utility;Emulator;
+# vi: encoding=utf-8

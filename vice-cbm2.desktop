@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VICE CBM-II (C610) emulator
+Name[pl]=Emulator CBM-II (C610) VICE
+Icon=cbm2icon
+Exec=xcbm2
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Utility;Emulator;
+# vi: encoding=utf-8

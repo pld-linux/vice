@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VICE C64 emulator
+Name[pl]=Emulator C64 VICE
+Icon=c64icon
+Exec=x64
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Utility;Emulator;
+# vi: encoding=utf-8

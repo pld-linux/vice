@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VICE VIC20 emulator
+Name[pl]=Emulator VIC20 VICE
+Icon=vic20icon
+Exec=xvic
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Utility;Emulator;
+# vi: encoding=utf-8

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VICE PET emulator
+Name[pl]=Emulator PET VICE
+Icon=peticon
+Exec=xpet
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Utility;Emulator;
+# vi: encoding=utf-8
