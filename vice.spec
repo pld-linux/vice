@@ -2,8 +2,8 @@
 # Conditional build:
 %bcond_without	gnome	# without GNOME support
 #
-Summary:	Commodore emulator
-Summary(pl):	Emulator Commodore
+Summary:	Versatile Commodore Emulator
+Summary(pl):	Uniwersalny emulator Commodore
 Name:		vice
 Version:	1.16
 Release:	1
@@ -11,6 +11,12 @@ License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
 # Source0-md5:	23848e7fe588b32549a5ce4ccf056207
+Source1:	%{name}-c128.desktop
+Source2:	%{name}-c64.desktop
+Source3:	%{name}-cbm2.desktop
+Source4:	%{name}-pet.desktop
+Source5:	%{name}-plus4.desktop
+Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-FHS.patch
 Patch2:		%{name}-gettext.patch
@@ -37,13 +43,13 @@ Unix, MS-DOS, Win95/NT, OS/2, RiscOS or BeOS machine and executes
 programs intended for the old 8-bit Commodore computers. The current
 version emulates the C64, the C128 (80 column screen is included now),
 the VIC20, all the PET models (except the SuperPET 9000, which is out
-of line anyway) and the CBM-II (aka C610).
+of line anyway), CBM-II (aka C610) and the Plus4.
 
 %description -l pl
 VICE jest wszechstronnym emulatorem 8-bitowego komputera Commodore.
 Aktualna wersja emuluje C64, C128 (wraz z trybem pracy 80 kolumnowym),
 VIC20, wszystkie modele PET (poza SuperPET 9000, który zreszt± nie
-pasowa³ do tej linii) oraz CBM-II (C610).
+pasowa³ do tej linii), CBM-II (C610) oraz Plus4.
 
 %prep
 %setup -q
@@ -75,6 +81,7 @@ cd ../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 
 perl -i -pe 's/SUBDIRS = html\n//' doc/Makefile
 %{__make} install \
@@ -84,6 +91,18 @@ gzip -9n $RPM_BUILD_ROOT%{_fontsdir}/misc/*
 rm -f doc/html/{Makefile*,texi2html}
 rm -rf $RPM_BUILD_ROOT%{_datadir}/vice/doc
 ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}
+
+cd src/arch/unix/x11
+for i in *icon.c; do
+	install $i $RPM_BUILD_ROOT%{_pixmapsdir}/${i%.c}.xpm
+done
 
 %find_lang %{name}
 
@@ -106,3 +125,5 @@ fontpostinst misc
 %{_fontsdir}/misc/*
 %{_mandir}/man?/*
 %{_infodir}/*.info*
+%{_desktopdir}/*
+%{_pixmapsdir}/*
