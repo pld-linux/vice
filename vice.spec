@@ -68,8 +68,7 @@ gettextize --copy --force
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	prefix=$RPM_BUILD_ROOT
+%{__make} prefix=$RPM_BUILD_ROOT
 
 gzip -9nf AUTHORS  Chan* FEEDBACK NEWS README 
 
