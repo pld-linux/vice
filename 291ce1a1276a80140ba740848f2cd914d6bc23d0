@@ -1,0 +1,3 @@
+- Workaround to make it build: don't run aclocal+autoconf+autoheader+
+  automake, disable acamfixes.patch, use %%configure2_13, patch Makefile.in
+  instead of Makefile.am. Automake is broken.
