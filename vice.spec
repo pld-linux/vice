@@ -13,6 +13,7 @@ BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
 BuildRequires:	gettext-devel
 BuildRequires:	readline-devel
+BuildRequires:	gnome-libs-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	libpng-devel
 BuildRequires:	esound-devel
@@ -43,14 +44,21 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %setup -q
 
 %build
+rm missing
 gettextize --copy --force
 aclocal
 autoconf
+autoheader
 automake -a -c
 %configure \
 	--enable-autobpp \
-	--with-xaw3d \
-	--with-sdl	
+	--with-sdl \
+	--with-x \
+	--enable-fullscreen \
+	--without-xaw3d \
+	--enable-gnomeui \
+	--enable-nls \
+	--without-included-gettext
 %{__make}
 
 %install
