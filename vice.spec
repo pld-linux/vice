@@ -15,7 +15,6 @@ Patch0:		%{name}-info.patch
 Patch1:		%{name}-DESTDIR.patch
 Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-home_etc.patch
-Patch4:		%{name}-amd64.patch
 URL:		http://viceteam.bei.t-online.de/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
@@ -50,9 +49,6 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%ifarch amd64
-%patch4 -p1
-%endif
 
 %build
 %{__gettextize}
