@@ -1,20 +1,4 @@
 diff -Nru vice-1.6/doc/vice.texi vice-1.6.new/doc/vice.texi
 --- vice-1.6/doc/vice.texi	Sun Dec 10 17:16:19 2000
 +++ vice-1.6.new/doc/vice.texi	Mon Apr  9 01:36:11 2001
-@@ -4,11 +4,12 @@
- @settitle VICE Manual
- @c %**end of header
- 
--@ifinfo
- @format
--START-INFO-DIR-ENTRY
--* VICE: (vice).        VICE, the Versatile Commodore Emulator.
--END-INFO-DIR-ENTRY
-+@dircategory Miscellaneous:
-+@direntry
-+* VICE: (vice).				VICE, the Versatile Commodore
-+					Emulator
-+@end direntry
- @end format
- @end ifinfo
- 
+y
