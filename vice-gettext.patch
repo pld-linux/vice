@@ -1,6 +1,6 @@
 --- vice-1.12/configure.in.orig	2003-06-09 00:06:31.000000000 +0200
 +++ vice-1.12/configure.in	2003-07-20 22:20:49.000000000 +0200
-@@ -210,119 +210,10 @@
+@@ -257,119 +257,10 @@
  dnl Add new languages here
  ALL_LINGUAS="de fr it sv pl"
  
@@ -21,7 +21,7 @@
 -  	 gt_cv_func_gettext_libc=yes, gt_cv_func_gettext_libc=no)])
 -     if test "$gt_cv_func_gettext_libc" = "yes" \
 -  	|| test "$gt_cv_func_gettext_libintl" = "yes"; then
--  	AC_DEFINE(HAVE_GETTEXT)
+-  	AC_DEFINE(HAVE_GETTEXT,,[Define if gettext if available.])
 -  	AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
 -  	  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)dnl
 -  	if test "$MSGFMT" != "no"; then
@@ -38,11 +38,11 @@
 -  	  INSTOBJEXT=.mo
 -  	fi
 -        USE_NLS=yes
--	AC_DEFINE(ENABLE_NLS)
--	AC_DEFINE(HAVE_LIBINTL_H)
--	AC_DEFINE_UNQUOTED(DATADIRNAME, "$DATADIRNAME")
+-	AC_DEFINE(ENABLE_NLS,,[Define if NLS support is enabled.])
+-	AC_DEFINE(HAVE_LIBINTL_H,,[use libintl for NLS.])
+-	AC_DEFINE_UNQUOTED(DATADIRNAME, "$DATADIRNAME",[NLS datadirname.])
 -	dnl this is prefixed with PREFIX
--	AC_DEFINE(NLS_LOCALEDIR, PREFIX"/"DATADIRNAME"/locale")
+-	AC_DEFINE(NLS_LOCALEDIR, PREFIX"/"DATADIRNAME"/locale",[NLS local directory.])
 -      else
 -        AC_MSG_WARN([libintl.h not found, disabling NLS])
 -        USE_NLS=no
@@ -119,8 +119,8 @@
 -AC_SUBST(NLS_LOCALEDIR)
 +AM_GNU_GETTEXT
 +AC_CHECK_HEADERS(libintl.h)
-+AC_DEFINE_UNQUOTED(DATADIRNAME, "$DATADIRNAME")
-+AC_DEFINE(NLS_LOCALEDIR, PREFIX"/"DATADIRNAME"/locale")
++AC_DEFINE_UNQUOTED(DATADIRNAME, "$DATADIRNAME",[NLS datadirname.])
++AC_DEFINE(NLS_LOCALEDIR, PREFIX"/"DATADIRNAME"/locale",[NLS local directory.])
  
  dnl Check for a perl interpreter.
  AC_PATH_PROG(PERL, perl)
