@@ -61,6 +61,9 @@ gettextize --copy --force
 #cd src/resid
 #autoconf
 #cd ../..
+if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
+	CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
+fi
 %configure2_13 \
 	--enable-autobpp \
 	--with-sdl \
