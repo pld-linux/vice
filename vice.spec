@@ -29,8 +29,6 @@ BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_prefix		/usr/X11R6
-%define		_mandir		%{_prefix}/man
 
 %description
 VICE is a Versatile Commodore Emulator, i.e. a program that runs on a
