@@ -10,6 +10,7 @@ Release:	1
 License:	GPL
 Group:		Applications/Emulators
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
+# Source0-md5:	580817b28097b0897e48463d4fc510aa
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-DESTDIR.patch
 Patch2:		%{name}-acamfixes.patch
