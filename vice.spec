@@ -8,19 +8,20 @@ Group:		Applications/Emulators
 Group(de):	Applikationen/Emulators
 Group(pl):	Aplikacje/Emulatory
 Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
+Patch0:		%{name}-info.patch
 URL:		http://www.cs.cmu.edu/~dsladic/vice/vice.html
+BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	XFree86-devel
 BuildRequires:	Xaw3d-devel
-BuildRequires:	gettext-devel
-BuildRequires:	readline-devel
-BuildRequires:	gnome-libs-devel
-BuildRequires:	SDL-devel >= 1.2.0
-BuildRequires:	libpng-devel
-BuildRequires:	esound-devel
-BuildRequires:	bison
-BuildRequires:	flex
 BuildRequires:	automake
 BuildRequires:	autoconf
+BuildRequires:	bison
+BuildRequires:	esound-devel
+BuildRequires:	flex
+BuildRequires:	gettext-devel
+BuildRequires:	gnome-libs-devel
+BuildRequires:	libpng-devel
+BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -42,6 +43,7 @@ VIC20, wszystkie modele PET (poza SuperPET 9000) oraz CBM-II (C610).
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 rm missing
