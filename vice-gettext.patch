@@ -1,8 +1,8 @@
 --- vice-1.12/configure.in.orig	2003-06-09 00:06:31.000000000 +0200
 +++ vice-1.12/configure.in	2003-07-20 22:20:49.000000000 +0200
-@@ -257,119 +257,10 @@
+@@ -272,127 +272,10 @@
  dnl Add new languages here
- ALL_LINGUAS="de fr it sv pl"
+ ALL_LINGUAS="de fr it sv pl nl"
  
 -dnl These rules are solely for the distribution goal.  While doing this
 -dnl we only have to keep exactly one list of the available catalogs
@@ -19,6 +19,14 @@
 -    [AC_CACHE_CHECK([for gettext in libc], gt_cv_func_gettext_libc,
 -      [AC_TRY_LINK([#include <libintl.h>], [return (int) gettext ("")],
 -  	 gt_cv_func_gettext_libc=yes, gt_cv_func_gettext_libc=no)])
+-
+-     AC_CACHE_CHECK([for gettext in libintl], gt_cv_func_gettext_libintl,
+-      [save_libs="$LIBS"
+-       LIBS="-lintl $LIBS"
+-       AC_TRY_LINK([#include <libintl.h>], [return (int) gettext ("")],
+-  	 INTLLIBS=-lintl gt_cv_func_gettext_libintl=yes, gt_cv_func_gettext_libintl=no)
+-       LIBS="$save_libs"])
+-
 -     if test "$gt_cv_func_gettext_libc" = "yes" \
 -  	|| test "$gt_cv_func_gettext_libintl" = "yes"; then
 -  	AC_DEFINE(HAVE_GETTEXT,,[Define if gettext if available.])
