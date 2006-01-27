@@ -5,12 +5,12 @@
 Summary:	Versatile Commodore Emulator
 Summary(pl):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	1.16
-Release:	2
+Version:	1.19
+Release:	1
 License:	GPL
 Group:		Applications/Emulators
-Source0:	ftp://ftp.funet.fi/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	23848e7fe588b32549a5ce4ccf056207
+Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
+# Source0-md5:	92f828f29e05f57d7a498a861d3dab6a
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
