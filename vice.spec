@@ -126,5 +126,5 @@ fontpostinst misc
 %{_fontsdir}/misc/*
 %{_mandir}/man?/*
 %{_infodir}/*.info*
-%{_desktopdir}/*
+%{_desktopdir}/*.desktop
 %{_pixmapsdir}/*
