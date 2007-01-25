@@ -6,7 +6,7 @@ Summary:	Versatile Commodore Emulator
 Summary(pl):	Uniwersalny emulator Commodore
 Name:		vice
 Version:	1.19
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-home_etc.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	SDL-devel >= 1.2.0
-BuildRequires:	XFree86-devel
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -77,7 +77,7 @@ cd ../..
 	--without-xaw3d \
 	--without-included-gettext \
 	--with-x
-%{__make}
+%{__make} CCLD=%__cxx
 
 %install
 rm -rf $RPM_BUILD_ROOT
