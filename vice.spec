@@ -3,7 +3,7 @@
 %bcond_without	gnome	# without GNOME support
 #
 Summary:	Versatile Commodore Emulator
-Summary(pl):	Uniwersalny emulator Commodore
+Summary(pl.UTF-8):   Uniwersalny emulator Commodore
 Name:		vice
 Version:	1.19
 Release:	2
@@ -45,11 +45,11 @@ version emulates the C64, the C128 (80 column screen is included now),
 the VIC20, all the PET models (except the SuperPET 9000, which is out
 of line anyway), CBM-II (aka C610) and the Plus4.
 
-%description -l pl
+%description -l pl.UTF-8
 VICE jest wszechstronnym emulatorem 8-bitowego komputera Commodore.
 Aktualna wersja emuluje C64, C128 (wraz z trybem pracy 80 kolumnowym),
-VIC20, wszystkie modele PET (poza SuperPET 9000, który zreszt± nie
-pasowa³ do tej linii), CBM-II (C610) oraz Plus4.
+VIC20, wszystkie modele PET (poza SuperPET 9000, ktÃ³ry zresztÄ… nie
+pasowaÅ‚ do tej linii), CBM-II (C610) oraz Plus4.
 
 %prep
 %setup -q
