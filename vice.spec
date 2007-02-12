@@ -3,7 +3,7 @@
 %bcond_without	gnome	# without GNOME support
 #
 Summary:	Versatile Commodore Emulator
-Summary(pl.UTF-8):   Uniwersalny emulator Commodore
+Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
 Version:	1.19
 Release:	2
