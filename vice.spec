@@ -5,12 +5,12 @@
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	1.19
-Release:	2
-License:	GPL
+Version:	1.21
+Release:	1
+License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	92f828f29e05f57d7a498a861d3dab6a
+# Source0-md5:	913bdee9d59d154ed33ef4e037d8a12c
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -23,7 +23,6 @@ Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-home_etc.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	SDL-devel >= 1.2.0
-BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -34,6 +33,8 @@ BuildRequires:	gettext-devel
 BuildRequires:	libpng-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
+BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-app-bdftopcf
 Requires(post,postun):	fontpostinst >= 0.1-6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
