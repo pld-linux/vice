@@ -1,8 +1,8 @@
---- vice-1.12/configure.in.orig	2003-06-09 00:06:31.000000000 +0200
-+++ vice-1.12/configure.in	2003-07-20 22:20:49.000000000 +0200
-@@ -272,127 +272,10 @@
+--- vice-1.21/configure.in~	2007-07-06 20:08:39.000000000 +0200
++++ vice-1.21/configure.in	2007-07-06 20:11:54.000000000 +0200
+@@ -418,129 +418,10 @@
  dnl Add new languages here
- ALL_LINGUAS="de fr it sv pl nl"
+ ALL_LINGUAS="de fr it sv pl nl hu"
  
 -dnl These rules are solely for the distribution goal.  While doing this
 -dnl we only have to keep exactly one list of the available catalogs
@@ -14,7 +14,7 @@
 -AC_SUBST(GMOFILES)
 -AC_SUBST(POFILES)
 -
--if test x"$enable_nls" != x"no" ; then
+-if test x"$enable_nls" != "xno" -a x"$is_unix" = "xyes"; then
 -  AC_CHECK_HEADER(libintl.h,
 -    [AC_CACHE_CHECK([for gettext in libc], gt_cv_func_gettext_libc,
 -      [AC_TRY_LINK([#include <libintl.h>], [return (int) gettext ("")],
@@ -109,11 +109,13 @@
 -  GENCAT=
 -  AC_SUBST(GENCAT)
 -else
--  AC_MSG_WARN([disabling NLS on user request])
+-  if test x"$is_unix" = "xyes"; then
+-    AC_MSG_WARN([disabling NLS on user request])
+-  fi
 -  USE_NLS=no
 -fi
 -
--if test x"$USE_NLS" = x"" ; then
+-if test x"$USE_NLS" = "x" ; then
 -  USE_NLS=no
 -fi
 -if test "$MSGFMT" = "no" ; then

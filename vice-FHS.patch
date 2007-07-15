@@ -1,8 +1,7 @@
-diff -urN vice-1.16.orig/src/arch/unix/x11/gnome/x11ui.c vice-1.16/src/arch/unix/x11/gnome/x11ui.c
---- vice-1.16.orig/src/arch/unix/x11/gnome/x11ui.c	2005-01-22 14:34:43.000000000 +0100
-+++ vice-1.16/src/arch/unix/x11/gnome/x11ui.c	2005-02-06 15:57:30.000000000 +0100
-@@ -401,9 +401,9 @@
-     gnome_init(PACKAGE, VERSION, 1, fake_argv);
+--- vice-1.21/src/arch/unix/x11/gnome/x11ui.c~	2007-03-04 22:47:42.000000000 +0100
++++ vice-1.21/src/arch/unix/x11/gnome/x11ui.c	2007-07-06 19:51:34.000000000 +0200
+@@ -425,9 +425,9 @@
+     gtk_init(&fake_argc, &fake_args);
  
      /* set X11 fontpath */
 -    if (access(PREFIX "/lib/vice/fonts/fonts.dir", R_OK) == 0)
@@ -13,7 +12,7 @@ diff -urN vice-1.16.orig/src/arch/unix/x11/gnome/x11ui.c vice-1.16/src/arch/unix
  	
  	if (system(cmd) != 0)
  	    fprintf(stderr, _("Can't add fontpath `%s'.\n"), cmd);
-@@ -1362,7 +1362,7 @@
+@@ -1435,7 +1435,7 @@
  	ui_dispatch_events();
  
  	/* remove fontpath, Don't care about result */
@@ -22,11 +21,10 @@ diff -urN vice-1.16.orig/src/arch/unix/x11/gnome/x11ui.c vice-1.16/src/arch/unix
  
          lib_free(s);	
  	exit(0);
-diff -urN vice-1.16.orig/src/arch/unix/archdep.h vice-1.16/src/arch/unix/archdep.h
---- vice-1.16.orig/src/arch/unix/archdep.h	2005-02-06 12:10:34.000000000 +0100
-+++ vice-1.16/src/arch/unix/archdep.h	2005-02-06 12:45:03.000000000 +0100
-@@ -91,7 +91,7 @@
- extern const char *archdep_home_etc_path(void);
+--- vice-1.21/src/arch/unix/archdep.h~	2005-03-28 21:10:20.000000000 +0200
++++ vice-1.21/src/arch/unix/archdep.h	2007-07-06 19:53:16.000000000 +0200
+@@ -96,7 +96,7 @@
+ extern const char *archdep_home_path(void);
  
  /* Define the default system directory (where the ROMs are).  */
 -#define LIBDIR          PREFIX "/lib/vice"
@@ -34,48 +32,22 @@ diff -urN vice-1.16.orig/src/arch/unix/archdep.h vice-1.16/src/arch/unix/archdep
  #define DOCDIR          LIBDIR "/doc"
  #define VICEUSERDIR     ".vice"
  
-diff -urN vice-1.16.orig/data/C128/Makefile.am vice-1.16/data/C128/Makefile.am
---- vice-1.16.orig/data/C128/Makefile.am	2003-07-27 20:19:46.000000000 +0200
-+++ vice-1.16/data/C128/Makefile.am	2005-02-06 12:08:38.000000000 +0100
-@@ -1,4 +1,4 @@
--c128dir = $(prefix)/lib/vice/C128
-+c128dir = $(datadir)/vice/C128
+--- vice-1.21/configure.in~	2007-03-04 22:58:50.000000000 +0100
++++ vice-1.21/configure.in	2007-07-06 20:00:05.000000000 +0200
+@@ -1891,7 +1891,7 @@
+ 		   [Where do we want to install the executable?])
  
- c128_DATA = \
- 	basic64 \
-diff -urN vice-1.16.orig/data/C64/Makefile.am vice-1.16/data/C64/Makefile.am
---- vice-1.16.orig/data/C64/Makefile.am	2004-12-19 19:28:01.000000000 +0100
-+++ vice-1.16/data/C64/Makefile.am	2005-02-06 12:08:42.000000000 +0100
-@@ -1,4 +1,4 @@
--c64dir = $(prefix)/lib/vice/C64
-+c64dir = $(datadir)/vice/C64
+ dnl Path for keymaps, ROMs etc.
+-VICEDIR="$PREFIX/lib/vice";
++VICEDIR="/usr/share/vice";
+ AC_SUBST(VICEDIR)
  
- c64_DATA = \
- 	basic \
-diff -urN vice-1.16.orig/data/CBM-II/Makefile.am vice-1.16/data/CBM-II/Makefile.am
---- vice-1.16.orig/data/CBM-II/Makefile.am	2004-12-19 20:00:59.000000000 +0100
-+++ vice-1.16/data/CBM-II/Makefile.am	2005-02-06 12:08:08.000000000 +0100
+ if false ; then
+--- vice-1.21/data/fonts/Makefile.am~	2006-01-30 22:48:17.000000000 +0100
++++ vice-1.21/data/fonts/Makefile.am	2007-07-06 21:34:07.000000000 +0200
 @@ -1,4 +1,4 @@
--cbm2dir = $(prefix)/lib/vice/CBM-II
-+cbm2dir = $(datadir)/vice/CBM-II
- 
- cbm2_DATA = \
- 	amber.vpl \
-diff -urN vice-1.16.orig/data/DRIVES/Makefile.am vice-1.16/data/DRIVES/Makefile.am
---- vice-1.16.orig/data/DRIVES/Makefile.am	2003-10-06 00:10:01.000000000 +0200
-+++ vice-1.16/data/DRIVES/Makefile.am	2005-02-06 12:08:33.000000000 +0100
-@@ -1,4 +1,4 @@
--drvdir = $(prefix)/lib/vice/DRIVES
-+drvdir = $(datadir)/vice/DRIVES
- 
- drv_DATA = \
- 	dos1541 \
-diff -urN vice-1.16.orig/data/fonts/Makefile.am vice-1.16/data/fonts/Makefile.am
---- vice-1.16.orig/data/fonts/Makefile.am	2003-11-08 14:34:41.000000000 +0100
-+++ vice-1.16/data/fonts/Makefile.am	2005-02-06 12:08:27.000000000 +0100
-@@ -1,4 +1,4 @@
--fontsdir = $(prefix)/lib/vice/fonts
-+fontsdir = $(datadir)/fonts/misc
+-fontsdir = $(VICEDIR)/fonts
++fontsdir = /usr/share/fonts/misc
  
  fonts_DATA = \
  	vice-cbm.bdf
@@ -83,67 +55,9 @@ diff -urN vice-1.16.orig/data/fonts/Makefile.am vice-1.16/data/fonts/Makefile.am
  
  install: install-data-am
  	@echo "Preparing fontdir..." ; \
--	cd $(DESTDIR)$(prefix)/lib/vice/fonts ; \
+-	cd $(DESTDIR)$(fontsdir) ; \
 +	cd $(DESTDIR)$(datadir)/fonts/misc ; \
  	bdftopcf -o vice-cbm.pcf vice-cbm.bdf ; \
 -	rm vice-cbm.bdf ; \
 -	mkfontdir .
 +	rm vice-cbm.bdf
-diff -urN vice-1.16.orig/data/PET/Makefile.am vice-1.16/data/PET/Makefile.am
---- vice-1.16.orig/data/PET/Makefile.am	2004-12-19 19:46:18.000000000 +0100
-+++ vice-1.16/data/PET/Makefile.am	2005-02-06 12:08:40.000000000 +0100
-@@ -42,7 +42,7 @@
- 	rom4b80.vrs \
- 	rom4g40.vrs
- 
--petdir = $(prefix)/lib/vice/PET
-+petdir = $(datadir)/vice/PET
- 
- pet_DATA = $(keymaps) $(roms) $(palettes) $(romsets)
- 
-diff -urN vice-1.16.orig/data/PLUS4/Makefile.am vice-1.16/data/PLUS4/Makefile.am
---- vice-1.16.orig/data/PLUS4/Makefile.am	2002-06-08 20:53:02.000000000 +0200
-+++ vice-1.16/data/PLUS4/Makefile.am	2005-02-06 12:08:31.000000000 +0100
-@@ -1,4 +1,4 @@
--plus4dir = $(prefix)/lib/vice/PLUS4
-+plus4dir = $(datadir)/vice/PLUS4
- 
- plus4_DATA = \
- 	3plus1hi \
-diff -urN vice-1.16.orig/data/PRINTER/Makefile.am vice-1.16/data/PRINTER/Makefile.am
---- vice-1.16.orig/data/PRINTER/Makefile.am	2003-11-10 16:14:54.000000000 +0100
-+++ vice-1.16/data/PRINTER/Makefile.am	2005-02-06 12:08:21.000000000 +0100
-@@ -1,4 +1,4 @@
--prtdir = $(prefix)/lib/vice/PRINTER
-+prtdir = $(datadir)/vice/PRINTER
- 
- prt_DATA = \
- 	cbm1526 \
-diff -urN vice-1.16.orig/data/VIC20/Makefile.am vice-1.16/data/VIC20/Makefile.am
---- vice-1.16.orig/data/VIC20/Makefile.am	2002-06-08 20:53:02.000000000 +0200
-+++ vice-1.16/data/VIC20/Makefile.am	2005-02-06 12:08:29.000000000 +0100
-@@ -1,5 +1,5 @@
- 
--vic20dir = $(prefix)/lib/vice/VIC20
-+vic20dir = $(datadir)/vice/VIC20
- 
- vic20_DATA = \
- 	basic \
-diff -urN vice-1.16.orig/doc/html/Makefile.am vice-1.16/doc/html/Makefile.am
---- vice-1.16.orig/doc/html/Makefile.am	2004-01-18 22:25:31.000000000 +0100
-+++ vice-1.16/doc/html/Makefile.am	2005-02-06 12:08:47.000000000 +0100
-@@ -1,4 +1,4 @@
--docdir = $(prefix)/lib/vice/doc
-+docdir = $(datadir)/vice/doc
- 
- doc_DATA = \
- 	images/new.gif \
-diff -urN vice-1.16.orig/doc/Makefile.am vice-1.16/doc/Makefile.am
---- vice-1.16.orig/doc/Makefile.am	2004-03-13 15:29:54.000000000 +0100
-+++ vice-1.16/doc/Makefile.am	2005-02-06 12:08:44.000000000 +0100
-@@ -1,4 +1,4 @@
--docdir = $(prefix)/lib/vice/doc
-+docdir = $(datadir)/vice/doc
- 
- doc_DATA = \
- 	MSDOS-Howto.txt \

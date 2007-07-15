@@ -1,8 +1,7 @@
-diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep.c
---- vice-1.13.orig/src/arch/unix/archdep.c	2003-04-24 21:00:14.000000000 +0200
-+++ vice-1.13/src/arch/unix/archdep.c	2003-11-09 13:56:07.000000000 +0100
-@@ -115,6 +115,14 @@
-     return home;
+--- vice-1.21/src/arch/unix/archdep.c~	2007-02-25 18:31:39.000000000 +0100
++++ vice-1.21/src/arch/unix/archdep.c	2007-07-15 15:41:55.000000000 +0200
+@@ -121,6 +121,14 @@
+ #endif
  }
  
 +const char *archdep_home_etc_path(void)
@@ -10,13 +9,13 @@ diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep
 +    char *home_etc = getenv("HOME_ETC");
 +
 +    if (home_etc) return home_etc;
-+		return archdep_home_path();
++               return archdep_home_path();
 +}
 +
  char *archdep_default_sysfile_pathlist(const char *emu_id)
  {
      static char *default_path;
-@@ -124,7 +132,7 @@
+@@ -134,7 +142,7 @@
          const char *home_path;
  
          boot_path = archdep_boot_path();
@@ -25,7 +24,7 @@ diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep
  
          /* First search in the `LIBDIR' then the $HOME/.vice/ dir (home_path)
             and then in the `boot_path'.  */
-@@ -161,7 +169,7 @@
+@@ -222,7 +230,7 @@
  {
      const char *home;
  
@@ -34,7 +33,7 @@ diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep
      return util_concat(home, "/.vice/vicerc", NULL);
  }
  
-@@ -169,7 +177,7 @@
+@@ -230,7 +238,7 @@
  {
      const char *home;
  
@@ -43,7 +42,7 @@ diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep
      return util_concat(home, "/.vice/fliplist-", machine_name, ".vfl", NULL);
  }
  
-@@ -179,7 +187,7 @@
+@@ -240,7 +248,7 @@
      const char *home;
      char *viceuserdir;
  
@@ -52,21 +51,20 @@ diff -Nru vice-1.13.orig/src/arch/unix/archdep.c vice-1.13/src/arch/unix/archdep
  
      viceuserdir = util_concat(home, "/.vice", NULL);
  
-diff -Nru vice-1.13.orig/src/arch/unix/archdep.h vice-1.13/src/arch/unix/archdep.h
---- vice-1.13.orig/src/arch/unix/archdep.h	2002-12-02 20:19:02.000000000 +0100
-+++ vice-1.13/src/arch/unix/archdep.h	2003-11-09 13:56:41.000000000 +0100
-@@ -76,6 +76,7 @@
- #define ARCHDEP_RAWDRIVE_DEFAULT "/dev/fd0"
+--- vice-1.21/src/arch/unix/archdep.h~	2007-07-15 15:37:48.000000000 +0200
++++ vice-1.21/src/arch/unix/archdep.h	2007-07-15 15:42:59.000000000 +0200
+@@ -93,7 +93,7 @@
+ /* Ethernet default device */
+ #define ARCHDEP_ETHERNET_DEFAULT_DEVICE "eth0"
  
- extern const char *archdep_home_path(void);
+-extern const char *archdep_home_path(void);
 +extern const char *archdep_home_etc_path(void);
  
- #endif
- 
-diff -Nru vice-1.13.orig/src/arch/unix/uicommands.c vice-1.13/src/arch/unix/uicommands.c
---- vice-1.13.orig/src/arch/unix/uicommands.c	2003-09-07 19:30:12.000000000 +0200
-+++ vice-1.13/src/arch/unix/uicommands.c	2003-11-09 13:57:50.000000000 +0100
-@@ -478,7 +478,7 @@
+ /* Define the default system directory (where the ROMs are).  */
+ #define LIBDIR          PREFIX "/share/vice"
+--- vice-1.21/src/arch/unix/gui/uicommands.c~	2007-02-11 23:57:19.000000000 +0100
++++ vice-1.21/src/arch/unix/gui/uicommands.c	2007-07-15 15:44:24.000000000 +0200
+@@ -295,7 +295,7 @@
  
  static UI_CALLBACK(load_quicksnap)
  {
@@ -75,7 +73,7 @@ diff -Nru vice-1.13.orig/src/arch/unix/uicommands.c vice-1.13/src/arch/unix/uico
          machine_name, ".vsf", NULL);
  
      if (!ui_emulation_is_paused())
-@@ -510,7 +510,7 @@
+@@ -327,7 +327,7 @@
  
  static UI_CALLBACK(save_quicksnap)
  {
