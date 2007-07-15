@@ -31,6 +31,7 @@ BuildRequires:	gtk+2-devel >= 1:2.0
 BuildRequires:	lame-libs-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
@@ -84,7 +85,9 @@ cd ../..
 	--without-xaw3d \
 	--without-included-gettext \
 	--with-x
-%{__make} CCLD=%__cxx
+# contains some C++ code included as "old" library (.a), so libtool can't detect it
+%{__make} \
+	CCLD="%{__cxx}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
