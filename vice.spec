@@ -1,7 +1,3 @@
-#
-# Conditional build:
-%bcond_without	gnome	# without GNOME support
-#
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
@@ -22,6 +18,7 @@ Patch1:		%{name}-FHS.patch
 Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-home_etc.patch
 URL:		http://www.viceteam.org/
+BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -29,12 +26,21 @@ BuildRequires:	bison
 BuildRequires:	esound-devel
 BuildRequires:	flex
 BuildRequires:	gettext-devel
-%{?with_gnome:BuildRequires:	gnome-libs-devel}
+BuildRequires:	giflib-devel
+BuildRequires:	gtk+2-devel >= 1:2.0
+BuildRequires:	lame-libs-devel
+BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
-BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-app-bdftopcf
+BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xorg-lib-libXv-devel
+BuildRequires:	xorg-lib-libXxf86dga-devel
+BuildRequires:	xorg-lib-libXxf86vm-devel
 Requires(post,postun):	fontpostinst >= 0.1-6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -73,7 +79,7 @@ cd ../..
 	--enable-autobpp \
 	--with-sdl \
 	--enable-fullscreen \
-	%{?with_gnome:--enable-gnomeui} \
+	--enable-gnomeui \
 	--enable-nls \
 	--without-xaw3d \
 	--without-included-gettext \
