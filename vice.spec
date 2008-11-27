@@ -1,12 +1,12 @@
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	1.22
+Version:	2.0
 Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
-Source0:	http://www.viceteam.org/online/%{name}-%{version}.tar.gz
-# Source0-md5:	33204acbb74bafb12594d39b55888626
+Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
+# Source0-md5:	e4af3962469cb2279429718946528f1d
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -14,9 +14,8 @@ Source4:	%{name}-pet.desktop
 Source5:	%{name}-plus4.desktop
 Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
-Patch1:		%{name}-FHS.patch
-Patch2:		%{name}-gettext.patch
-Patch3:		%{name}-home_etc.patch
+Patch1:		%{name}-gettext.patch
+Patch2:		%{name}-home_etc.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -37,6 +36,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRequires:	xorg-app-bdftopcf
+BuildRequires:	xorg-app-mkfontdir
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXrandr-devel
@@ -65,7 +65,7 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+perl -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
 %{__gettextize}
@@ -96,12 +96,13 @@ install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 
 perl -i -pe 's/SUBDIRS = html\n//' doc/Makefile
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	VICEDIR="%{_datadir}/%{name}"
 
-gzip -9n $RPM_BUILD_ROOT%{_fontsdir}/misc/*
 rm -f doc/html/{Makefile*,texi2html}
 rm -rf $RPM_BUILD_ROOT%{_datadir}/vice/doc
-ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
+# ?
+#ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}
