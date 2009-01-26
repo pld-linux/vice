@@ -65,7 +65,7 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-perl -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
+%{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
 %{__gettextize}
@@ -94,7 +94,7 @@ cd ../..
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 
-perl -i -pe 's/SUBDIRS = html\n//' doc/Makefile
+%{__perl} -i -pe 's/SUBDIRS = html\n//' doc/Makefile
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	VICEDIR="%{_datadir}/%{name}"
