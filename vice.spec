@@ -16,6 +16,7 @@ Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-gettext.patch
 Patch2:		%{name}-home_etc.patch
+Patch3:		%{name}-gcc44.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -65,6 +66,7 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 %{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
