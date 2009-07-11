@@ -1,6 +1,6 @@
 diff -up vice-2.1/src/arch/unix/joy.c~ vice-2.1/src/arch/unix/joy.c
---- vice-2.1/src/arch/unix/joy.c~2008-10-25 21:35:56.000000000 +0200
-+++ vice-2.1/src/arch/unix/joy.c2009-04-01 10:32:24.000000000 +0200
+--- vice-2.1/src/arch/unix/joy.c~	2008-10-25 21:35:56.000000000 +0200
++++ vice-2.1/src/arch/unix/joy.c	2009-04-01 10:32:24.000000000 +0200
 @@ -131,7 +131,7 @@ static int     use_old_api=1;
  #define JS_DATA_TYPE joystick
  #define JS_RETURN    sizeof(struct joystick)
