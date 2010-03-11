@@ -1,12 +1,12 @@
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	2.1
-Release:	3
+Version:	2.2
+Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	a4cca1aad12e12ac7f37d6c85310ade8
+# Source0-md5:	6737f540806205384e9129026898b0a1
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -16,7 +16,6 @@ Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-gettext.patch
 Patch2:		%{name}-home_etc.patch
-Patch3:		%{name}-gcc44.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -33,6 +32,7 @@ BuildRequires:	lame-libs-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
@@ -66,7 +66,6 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
