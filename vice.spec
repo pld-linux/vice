@@ -1,3 +1,7 @@
+# TODO:
+# - on installation in tries to copy /usr/share/fonts/misc/CBM.ttf to
+#   $HOME/.fonts, which is obviously wrong and requires preinstalled vice;
+#   FIX data/fonts/Makefile.am
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
