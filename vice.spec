@@ -1,7 +1,8 @@
-# TODO:
-# - on installation in tries to copy /usr/share/fonts/misc/CBM.ttf to
-#   $HOME/.fonts, which is obviously wrong and requires preinstalled vice;
-#   FIX data/fonts/Makefile.am
+#
+# Conditional build:
+%bcond_with	esd		# EsounD support
+%bcond_without	pulseaudio	# pulseaudio support
+#
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
@@ -20,6 +21,8 @@ Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-gettext.patch
 Patch2:		%{name}-home_etc.patch
+Patch3:		%{name}-fonts.patch
+Patch4:		%{name}-link.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -27,16 +30,20 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
+%{?with_esd:BuildRequires:	esound-devel}
 BuildRequires:	flex
+BuildRequires:	ffmpeg-devel
 BuildRequires:	gettext-devel
 BuildRequires:	giflib-devel
 BuildRequires:	gtk+2-devel >= 1:2.0
+BuildRequires:	gtkglext-devel
 BuildRequires:	lame-libs-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
+%{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRequires:	xorg-app-bdftopcf
@@ -69,6 +76,8 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 %{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
@@ -83,13 +92,16 @@ cd ../..
 %configure \
 	--libdir=%{_datadir} \
 	--enable-autobpp \
-	--with-sdl \
 	--enable-fullscreen \
 	--enable-gnomeui \
 	--enable-nls \
-	--without-xaw3d \
+	%{?with_pulseaudio:--with-pulse} \
+	--with-sdl \
+	--with-x \
+	%{!?with_esd:--without-esd} \
 	--without-included-gettext \
-	--with-x
+	--without-xaw3d
+
 # contains some C++ code included as "old" library (.a), so libtool can't detect it
 %{__make} \
 	CCLD="%{__cxx}"
@@ -103,8 +115,8 @@ install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 	DESTDIR=$RPM_BUILD_ROOT \
 	VICEDIR="%{_datadir}/%{name}"
 
-rm -f doc/html/{Makefile*,texi2html}
-rm -rf $RPM_BUILD_ROOT%{_datadir}/vice/doc
+%{__rm} doc/html/{Makefile*,texi2html}
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/vice/doc
 # ?
 #ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
 
@@ -121,26 +133,50 @@ for i in *icon.c; do
 done
 cd ../../../..
 
+install -d $RPM_BUILD_ROOT%{_fontsdir}/TTF
+mv $RPM_BUILD_ROOT%{_fontsdir}/{misc,TTF}/CBM.ttf
+
 %find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
+fontpostinst TTF
 fontpostinst misc
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %postun
+fontpostinst TTF
 fontpostinst misc
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/mon.txt doc/html
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/c1541
+%attr(755,root,root) %{_bindir}/cartconv
+%attr(755,root,root) %{_bindir}/petcat
+%attr(755,root,root) %{_bindir}/vsid
+%attr(755,root,root) %{_bindir}/x128
+%attr(755,root,root) %{_bindir}/x64
+%attr(755,root,root) %{_bindir}/x64dtv
+%attr(755,root,root) %{_bindir}/xcbm2
+%attr(755,root,root) %{_bindir}/xpet
+%attr(755,root,root) %{_bindir}/xplus4
+%attr(755,root,root) %{_bindir}/xvic
 %{_datadir}/vice
-%{_fontsdir}/misc/*
-%{_mandir}/man?/*
-%{_infodir}/*.info*
-%{_desktopdir}/*.desktop
-%{_pixmapsdir}/*
+%{_fontsdir}/misc/vice-cbm.bdf
+%{_fontsdir}/TTF/CBM.ttf
+%{_mandir}/man1/c1541.1*
+%{_mandir}/man1/petcat.1*
+%{_mandir}/man1/vice.1*
+%{_infodir}/vice.info*
+%{_desktopdir}/vice-*.desktop
+%{_pixmapsdir}/c128icon.xpm
+%{_pixmapsdir}/c64dtvicon.xpm
+%{_pixmapsdir}/c64icon.xpm
+%{_pixmapsdir}/cbm2icon.xpm
+%{_pixmapsdir}/peticon.xpm
+%{_pixmapsdir}/plus4icon.xpm
+%{_pixmapsdir}/vic20icon.xpm
