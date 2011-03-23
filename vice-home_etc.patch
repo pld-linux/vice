@@ -1,65 +1,3 @@
---- vice-2.2/src/arch/unix/archdep.c~	2009-10-21 18:46:46.000000000 +0200
-+++ vice-2.2/src/arch/unix/archdep.c	2010-03-11 11:50:24.756830676 +0100
-@@ -135,6 +135,14 @@
-     return home;
- }
- 
-+extern const char *archdep_home_etc_path(void)
-+{
-+       char *home_etc = getenv("HOME_ETC");
-+
-+       if (home_etc) return home_etc;
-+               return archdep_home_path();
-+}
-+
- char *archdep_default_sysfile_pathlist(const char *emu_id)
- {
-     static char *default_path;
-@@ -148,7 +156,7 @@
-         const char *home_path;
- 
-         boot_path = archdep_boot_path();
--        home_path = archdep_home_path();
-+        home_path = archdep_home_etc_path();
- 
-         /* First search in the `LIBDIR' then the $HOME/.vice/ dir (home_path)
-            and then in the `boot_path'.  */
-@@ -214,7 +222,7 @@
-     if (archdep_pref_path == NULL) {
-         const char *home;
-       
--        home = archdep_home_path();
-+        home = archdep_home_etc_path();
-         return util_concat(home, "/.vice/vicerc", NULL);
-     } else {
-         return util_concat(archdep_pref_path, "/vicerc", NULL);
-@@ -226,7 +234,7 @@
-     if (archdep_pref_path == NULL) {
-         const char *home;
- 
--        home = archdep_home_path();
-+        home = archdep_home_etc_path();
-         return util_concat(home, "/.vice/fliplist-", machine_name, ".vfl", NULL);
-     } else {
-         return util_concat(archdep_pref_path, "/fliplist-", machine_name, ".vfl", NULL);
-@@ -238,7 +246,7 @@
-     if (archdep_pref_path == NULL) {
-         const char *home;
- 
--        home = archdep_home_path();
-+        home = archdep_home_etc_path();
-         return util_concat(home, "/.vice/autostart-", machine_name, ".d64", NULL);
-     } else {
-         return util_concat(archdep_pref_path, "/autostart-", machine_name, ".d64", NULL);
-@@ -252,7 +260,7 @@
-     const char *viceuserdir;
- 
-     if (archdep_pref_path == NULL) {
--        home = archdep_home_path();
-+        home = archdep_home_etc_path();
-         viceuserdir = util_concat(home, "/.vice", NULL);
-     } else {
-         viceuserdir = archdep_pref_path;
 --- vice-2.2/src/arch/unix/archdep.h~	2009-10-21 18:46:46.000000000 +0200
 +++ vice-2.2/src/arch/unix/archdep.h	2010-03-11 11:51:47.773489033 +0100
 @@ -114,7 +114,7 @@
@@ -91,3 +29,65 @@
  
      interrupt_maincpu_trigger_trap(save_snapshot_trap, (void *)fname);
  }
+--- vice-2.3/src/arch/unix/archdep.c~	2010-10-24 06:12:37.000000000 +0200
++++ vice-2.3/src/arch/unix/archdep.c	2011-03-23 12:15:18.370096657 +0100
+@@ -151,6 +151,14 @@
+     return home;
+ }
+ 
++extern const char *archdep_home_etc_path(void)
++{
++	char *home_etc = getenv("HOME_ETC");
++
++	if (home_etc) return home_etc;
++	return archdep_home_path();
++}
++
+ char *archdep_default_sysfile_pathlist(const char *emu_id)
+ {
+     static char *default_path;
+@@ -164,7 +172,7 @@
+         const char *home_path;
+ 
+         boot_path = archdep_boot_path();
+-        home_path = archdep_home_path();
++        home_path = archdep_home_etc_path();
+ 
+         /* First search in the `LIBDIR' then the $HOME/.vice/ dir (home_path)
+            and then in the `boot_path'.  */
+@@ -230,7 +238,7 @@
+     if (archdep_pref_path == NULL) {
+         const char *home;
+       
+-        home = archdep_home_path();
++        home = archdep_home_etc_path();
+         return util_concat(home, "/.vice/vicerc", NULL);
+     } else {
+         return util_concat(archdep_pref_path, "/vicerc", NULL);
+@@ -242,7 +250,7 @@
+     if (archdep_pref_path == NULL) {
+         const char *home;
+ 
+-        home = archdep_home_path();
++        home = archdep_home_etc_path();
+         return util_concat(home, "/.vice/fliplist-", machine_get_name(), ".vfl", NULL);
+     } else {
+         return util_concat(archdep_pref_path, "/fliplist-", machine_get_name(), ".vfl", NULL);
+@@ -254,7 +262,7 @@
+     if (archdep_pref_path == NULL) {
+         const char *home;
+ 
+-        home = archdep_home_path();
++        home = archdep_home_etc_path();
+         return util_concat(home, "/.vice/autostart-", machine_get_name(), ".d64", NULL);
+     } else {
+         return util_concat(archdep_pref_path, "/autostart-", machine_get_name(), ".d64", NULL);
+@@ -268,7 +276,7 @@
+     const char *viceuserdir;
+ 
+     if (archdep_pref_path == NULL) {
+-        home = archdep_home_path();
++        home = archdep_home_etc_path();
+         viceuserdir = util_concat(home, "/.vice", NULL);
+     } else {
+         viceuserdir = archdep_pref_path;
