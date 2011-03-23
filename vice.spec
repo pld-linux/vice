@@ -1,17 +1,16 @@
 #
 # Conditional build:
-%bcond_with	esd		# EsounD support
 %bcond_without	pulseaudio	# pulseaudio support
 #
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	2.2
-Release:	2
+Version:	2.3
+Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	6737f540806205384e9129026898b0a1
+# Source0-md5:	b48d137874daad50c087a0686cbdde34
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -30,9 +29,8 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
-%{?with_esd:BuildRequires:	esound-devel}
-BuildRequires:	flex
 BuildRequires:	ffmpeg-devel
+BuildRequires:	flex
 BuildRequires:	gettext-devel
 BuildRequires:	giflib-devel
 BuildRequires:	gtk+2-devel >= 1:2.0
@@ -91,15 +89,12 @@ cd src/resid
 cd ../..
 %configure \
 	--libdir=%{_datadir} \
-	--enable-autobpp \
 	--enable-fullscreen \
 	--enable-gnomeui \
 	--enable-nls \
 	%{?with_pulseaudio:--with-pulse} \
-	--with-sdl \
+	--with-sdlsound \
 	--with-x \
-	%{!?with_esd:--without-esd} \
-	--without-included-gettext \
 	--without-xaw3d
 
 # contains some C++ code included as "old" library (.a), so libtool can't detect it
@@ -115,7 +110,6 @@ install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 	DESTDIR=$RPM_BUILD_ROOT \
 	VICEDIR="%{_datadir}/%{name}"
 
-%{__rm} doc/html/{Makefile*,texi2html}
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/vice/doc
 # ?
 #ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
@@ -153,7 +147,7 @@ fontpostinst misc
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/mon.txt doc/html
+%doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/html
 %attr(755,root,root) %{_bindir}/c1541
 %attr(755,root,root) %{_bindir}/cartconv
 %attr(755,root,root) %{_bindir}/petcat
@@ -161,6 +155,7 @@ fontpostinst misc
 %attr(755,root,root) %{_bindir}/x128
 %attr(755,root,root) %{_bindir}/x64
 %attr(755,root,root) %{_bindir}/x64dtv
+%attr(755,root,root) %{_bindir}/x64sc
 %attr(755,root,root) %{_bindir}/xcbm2
 %attr(755,root,root) %{_bindir}/xpet
 %attr(755,root,root) %{_bindir}/xplus4
