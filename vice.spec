@@ -6,7 +6,7 @@ Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
 Version:	2.3
-Release:	3
+Release:	4
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ Patch1:		%{name}-gettext.patch
 Patch2:		%{name}-home_etc.patch
 Patch3:		%{name}-fonts.patch
 Patch4:		%{name}-link.patch
+Patch5:		%{name}-ffmpeg.patch
 URL:		http://www.viceteam.org/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -76,6 +77,7 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 %{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
