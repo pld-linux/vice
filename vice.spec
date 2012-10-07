@@ -1,12 +1,15 @@
+# TODO
+# - fonts-TTF-CBM subpackage:
+#   %{_fontsdir}/TTF/CBM.ttf
 #
 # Conditional build:
 %bcond_without	pulseaudio	# pulseaudio support
-#
+
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
 Version:	2.3
-Release:	4
+Release:	5
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
