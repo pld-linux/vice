@@ -1,10 +1,12 @@
---- vice-2.2/configure.in.orig	2011-02-21 16:41:42.186971716 +0100
-+++ vice-2.2/configure.in	2011-02-21 18:43:03.414973392 +0100
-@@ -1106,19 +1106,6 @@
+--- vice-2.4/configure.in.orig	2012-11-25 10:36:26.562393010 +0100
++++ vice-2.4/configure.in	2012-11-25 10:41:56.032386143 +0100
+@@ -1279,22 +1279,6 @@
  
    if test x"$UNIX_NETWORK_HEADERS_PRESENT" = "xyes"; then
  
 -    dnl Check for possible extra needed network libraries
+-    AC_CHECK_LIB(intl, dgettext,[ NETPLAY_LIBS="-lintl $NETPLAY_LIBS";
+-                                  LIBS="-lintl $LIBS"],,)
 -    AC_CHECK_LIB(nsl, gethostbyname,[ NETPLAY_LIBS="-lnsl $NETPLAY_LIBS";
 -                                      LIBS="-lnsl $LIBS"],,)
 -    AC_CHECK_LIB(socket, gethostbyname,[ NETPLAY_LIBS="-lsocket $NETPLAY_LIBS";
@@ -17,16 +19,16 @@
 -                                       LIBS="-linet $LIBS"],,)
 -    AC_CHECK_LIB(watt, gethostbyname,[ NETPLAY_LIBS="-lwatt $NETPLAY_LIBS";
 -                                       LIBS="-lwatt $LIBS"],,)
- 
+-
      dnl Check for needed functions
      UNIX_NETWORK_FUNCS_PRESENT=yes
-@@ -2040,15 +2027,6 @@
-     LINK_X_LIBS="$GTK_LIBS $GTKGL_LIBS $LINK_X_LIBS"
-   else
-     AC_DEFINE(USE_COLOR_MANAGEMENT,,[Enable new color management code.])
+ 
+@@ -2426,14 +2410,6 @@
+     AC_CHECK_LIB(intl, dgettext,[ X_LIBS="-lintl $X_LIBS";
+                  LINK_X_LIBS="-lintl $LINK_X_LIBS"],,$X_LIBS)
+ 
 -    dnl instead of assuming that libsocket needs libnsl, we
 -    dnl will check the existance of libnsl first.
--
 -    AC_CHECK_LIB(nsl, gethostbyname,[ X_LIBS="-lnsl $X_LIBS";
 -                 LINK_X_LIBS="-lnsl $LINK_X_LIBS"],,$X_LIBS)
 -    AC_CHECK_LIB(socket, gethostbyname,[ X_LIBS="-lsocket $X_LIBS";

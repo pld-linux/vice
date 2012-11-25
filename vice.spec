@@ -4,16 +4,16 @@
 #
 # Conditional build:
 %bcond_without	pulseaudio	# pulseaudio support
-
+#
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	2.3
-Release:	5
+Version:	2.4
+Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	b48d137874daad50c087a0686cbdde34
+# Source0-md5:	b017647a0c159bbe43cdb81762d1c577
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -162,6 +162,7 @@ fontpostinst misc
 %attr(755,root,root) %{_bindir}/x64dtv
 %attr(755,root,root) %{_bindir}/x64sc
 %attr(755,root,root) %{_bindir}/xcbm2
+%attr(755,root,root) %{_bindir}/xcbm5x0
 %attr(755,root,root) %{_bindir}/xpet
 %attr(755,root,root) %{_bindir}/xplus4
 %attr(755,root,root) %{_bindir}/xvic

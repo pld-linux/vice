@@ -1,47 +1,120 @@
---- vice-2.3/src/gfxoutputdrv/ffmpegdrv.c.orig	2012-02-11 11:00:26.471312970 +0100
-+++ vice-2.3/src/gfxoutputdrv/ffmpegdrv.c	2012-02-11 11:01:17.575884177 +0100
-@@ -342,7 +342,7 @@
- 
+--- vice-2.4/src/gfxoutputdrv/ffmpeglib.h.orig	2011-10-24 21:06:48.000000000 +0200
++++ vice-2.4/src/gfxoutputdrv/ffmpeglib.h	2012-11-25 13:09:18.518868503 +0100
+@@ -80,12 +80,11 @@ typedef int (*avpicture_get_size_t) (int
+ typedef void (*av_init_packet_t) (AVPacket *pkt);
+ typedef void (*av_register_all_t) (void);
+ typedef AVStream* (*av_new_stream_t) (AVFormatContext*, int);
+-typedef int (*av_set_parameters_t) (AVFormatContext*, AVFormatParameters*);
+-typedef int (*av_write_header_t) (AVFormatContext*);
++typedef int (*avformat_write_header_t) (AVFormatContext*, AVDictionary **);
+ typedef int (*av_write_frame_t) (AVFormatContext*, AVPacket*);
+ typedef int (*av_write_trailer_t) (AVFormatContext*);
+-typedef int (*url_fopen_t) (ByteIOContext**, const char*, int);
+-typedef int (*url_fclose_t) (ByteIOContext*);
++typedef int (*avio_open_t) (AVIOContext**, const char*, int);
++typedef int (*avio_close_t) (AVIOContext*);
+ typedef void (*dump_format_t) (AVFormatContext *, int, const char*, int);
+ typedef AVOutputFormat* (*av_guess_format_t) (const char*, const char*, const char*);
+ typedef int (*img_convert_t) (AVPicture*, int, AVPicture*, int, int, int);
+@@ -118,12 +117,11 @@ struct ffmpeglib_s {
+     av_init_packet_t            p_av_init_packet;
+     av_register_all_t           p_av_register_all;
+     av_new_stream_t             p_av_new_stream;
+-    av_set_parameters_t         p_av_set_parameters;
+-    av_write_header_t           p_av_write_header;
++    avformat_write_header_t     p_avformat_write_header;
+     av_write_frame_t            p_av_write_frame;
+     av_write_trailer_t          p_av_write_trailer;
+-    url_fopen_t                 p_url_fopen;
+-    url_fclose_t                p_url_fclose;
++    avio_open_t                 p_avio_open;
++    avio_close_t                p_avio_close;
+     dump_format_t               p_dump_format;
+     av_guess_format_t           p_av_guess_format;
+ #ifndef HAVE_FFMPEG_SWSCALE
+--- vice-2.4/src/gfxoutputdrv/ffmpegdrv.c.orig	2012-02-13 20:31:44.000000000 +0100
++++ vice-2.4/src/gfxoutputdrv/ffmpegdrv.c	2012-11-25 13:10:46.712199998 +0100
+@@ -343,7 +343,7 @@ static int ffmpegmovie_init_audio(int sp
      c = st->codec;
      c->codec_id = ffmpegdrv_fmt->audio_codec;
--    c->codec_type = CODEC_TYPE_AUDIO;
-+    c->codec_type = AVMEDIA_TYPE_AUDIO;
-     c->sample_fmt = SAMPLE_FMT_S16;
+     c->codec_type = AVMEDIA_TYPE_AUDIO;
+-    c->sample_fmt = SAMPLE_FMT_S16;
++    c->sample_fmt = AV_SAMPLE_FMT_S16;
  
      /* put sample parameters */
-@@ -370,7 +370,7 @@
-         pkt.size = (*ffmpeglib.p_avcodec_encode_audio)(c, 
-                         audio_outbuf, audio_outbuf_size, audio_in->buffer);
-         pkt.pts = c->coded_frame->pts;
--        pkt.flags |= PKT_FLAG_KEY;
-+        pkt.flags |= AV_PKT_FLAG_KEY;
-         pkt.stream_index = audio_st->index;
-         pkt.data = audio_outbuf;
+     c->bit_rate = audio_bitrate;
+@@ -613,11 +613,6 @@ static int ffmpegdrv_init_file(void)
+     if (!video_init_done || !audio_init_done)
+         return 0;
  
-@@ -559,7 +559,7 @@
+-    if ((*ffmpeglib.p_av_set_parameters)(ffmpegdrv_oc, NULL) < 0) {
+-        log_debug("ffmpegdrv: Invalid output format parameters");
+-            return -1;
+-    }
+-
+     (*ffmpeglib.p_dump_format)(ffmpegdrv_oc, 0, ffmpegdrv_oc->filename, 1);
  
-     c = st->codec;
-     c->codec_id = ffmpegdrv_fmt->video_codec;
--    c->codec_type = CODEC_TYPE_VIDEO;
-+    c->codec_type = AVMEDIA_TYPE_VIDEO;
+     if (video_st && (ffmpegdrv_open_video(ffmpegdrv_oc, video_st) < 0)) {
+@@ -632,8 +627,8 @@ static int ffmpegdrv_init_file(void)
+     }
  
-     /* put sample parameters */
-     c->bit_rate = video_bitrate;
-@@ -819,7 +819,7 @@
-     if (ffmpegdrv_oc->oformat->flags & AVFMT_RAWPICTURE) {
-         AVPacket pkt;
-         (*ffmpeglib.p_av_init_packet)(&pkt);
--        pkt.flags |= PKT_FLAG_KEY;
-+        pkt.flags |= AV_PKT_FLAG_KEY;
-         pkt.stream_index = video_st->index;
-         pkt.data = (uint8_t*)picture;
-         pkt.size = sizeof(AVPicture);
-@@ -840,7 +840,7 @@
-             (*ffmpeglib.p_av_init_packet)(&pkt);
-             pkt.pts = c->coded_frame->pts;
-             if (c->coded_frame->key_frame)
--                pkt.flags |= PKT_FLAG_KEY;
-+                pkt.flags |= AV_PKT_FLAG_KEY;
-             pkt.stream_index = video_st->index;
-             pkt.data = video_outbuf;
-             pkt.size = out_size;
+     if (!(ffmpegdrv_fmt->flags & AVFMT_NOFILE)) {
+-        if ((*ffmpeglib.p_url_fopen)(&ffmpegdrv_oc->pb, ffmpegdrv_oc->filename,
+-                            URL_WRONLY) < 0) 
++        if ((*ffmpeglib.p_avio_open)(&ffmpegdrv_oc->pb, ffmpegdrv_oc->filename,
++                            AVIO_FLAG_WRITE) < 0) 
+         {
+             ui_error(translate_text(IDGS_FFMPEG_CANNOT_OPEN_S), ffmpegdrv_oc->filename);
+             screenshot_stop_recording();
+@@ -642,7 +637,7 @@ static int ffmpegdrv_init_file(void)
+ 
+     }
+ 
+-    (*ffmpeglib.p_av_write_header)(ffmpegdrv_oc);
++    (*ffmpeglib.p_avformat_write_header)(ffmpegdrv_oc, NULL);
+ 
+     log_debug("ffmpegdrv: Initialized file successfully");
+ 
+@@ -724,7 +719,7 @@ static int ffmpegdrv_close(screenshot_t
+         (*ffmpeglib.p_av_write_trailer)(ffmpegdrv_oc);
+         if (!(ffmpegdrv_fmt->flags & AVFMT_NOFILE)) {
+             /* close the output file */
+-            (*ffmpeglib.p_url_fclose)(ffmpegdrv_oc->pb);
++            (*ffmpeglib.p_avio_close)(ffmpegdrv_oc->pb);
+         }
+     }
+     
+--- vice-2.4/src/gfxoutputdrv/ffmpeglib.c.orig	2011-09-18 15:09:45.000000000 +0200
++++ vice-2.4/src/gfxoutputdrv/ffmpeglib.c	2012-11-25 13:11:58.342198505 +0100
+@@ -208,12 +208,11 @@ static int load_avformat(ffmpeglib_t *li
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_init_packet);
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_register_all);
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_new_stream);
+-        GET_SYMBOL_AND_TEST_AVFORMAT(av_set_parameters);
+-        GET_SYMBOL_AND_TEST_AVFORMAT(av_write_header);
++        GET_SYMBOL_AND_TEST_AVFORMAT(avformat_write_header);
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_write_frame);
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_write_trailer);
+-        GET_SYMBOL_AND_TEST_AVFORMAT(url_fopen);
+-        GET_SYMBOL_AND_TEST_AVFORMAT(url_fclose);
++        GET_SYMBOL_AND_TEST_AVFORMAT(avio_open);
++        GET_SYMBOL_AND_TEST_AVFORMAT(avio_close);
+         GET_SYMBOL_AND_TEST_AVFORMAT(dump_format);
+         GET_SYMBOL_AND_TEST_AVFORMAT(av_guess_format);
+ #ifndef HAVE_FFMPEG_SWSCALE
+@@ -240,12 +239,11 @@ static void free_avformat(ffmpeglib_t *l
+     lib->p_av_init_packet = NULL;
+     lib->p_av_register_all = NULL;
+     lib->p_av_new_stream = NULL;
+-    lib->p_av_set_parameters = NULL;
+-    lib->p_av_write_header = NULL;
++    lib->p_avformat_write_header = NULL;
+     lib->p_av_write_frame = NULL;
+     lib->p_av_write_trailer = NULL;
+-    lib->p_url_fopen = NULL;
+-    lib->p_url_fclose = NULL;
++    lib->p_avio_open = NULL;
++    lib->p_avio_close = NULL;
+     lib->p_dump_format = NULL;
+     lib->p_av_guess_format = NULL;
+ #ifndef HAVE_FFMPEG_SWSCALE
