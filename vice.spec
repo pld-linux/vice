@@ -48,6 +48,7 @@ BuildRequires:	pkgconfig
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
+BuildRequires:	vte0-devel
 BuildRequires:	xorg-app-bdftopcf
 BuildRequires:	xorg-app-mkfontdir
 BuildRequires:	xorg-lib-libX11-devel
