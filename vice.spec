@@ -36,7 +36,7 @@ BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	ffmpeg-devel
 BuildRequires:	flex
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	giflib-devel
 BuildRequires:	gtk+2-devel >= 1:2.0
 BuildRequires:	gtkglext-devel
