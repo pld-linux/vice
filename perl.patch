@@ -1,0 +1,20 @@
+--- vice-2.4/doc/html/texi2html~	2008-03-30 17:04:15.000000000 +0200
++++ vice-2.4/doc/html/texi2html	2016-10-20 08:58:42.902422283 +0200
+@@ -1557,7 +1557,7 @@
+     $level--; # here we start at 0
+     if ($name =~ /^appendix/) {
+ 	# appendix style
+-	if (defined(@appendix_sec_num)) {
++	if (@appendix_sec_num) {
+ 	    &incr_sec_num($level, @appendix_sec_num);
+ 	} else {
+ 	    @appendix_sec_num = ('A', 0, 0, 0);
+@@ -1565,7 +1565,7 @@
+ 	return(join('.', @appendix_sec_num[0..$level]));
+     } else {
+ 	# normal style
+-	if (defined(@normal_sec_num)) {
++	if (@normal_sec_num) {
+ 	    &incr_sec_num($level, @normal_sec_num);
+ 	} else {
+ 	    @normal_sec_num = (1, 0, 0, 0);
