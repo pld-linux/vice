@@ -8,12 +8,12 @@
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	2.4
-Release:	6
+Version:	3.3
+Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
 Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	b017647a0c159bbe43cdb81762d1c577
+# Source0-md5:	b0797f534b33f638220418207d606cf5
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -21,16 +21,8 @@ Source4:	%{name}-pet.desktop
 Source5:	%{name}-plus4.desktop
 Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
-Patch1:		%{name}-gettext.patch
-Patch2:		%{name}-home_etc.patch
-Patch3:		%{name}-fonts.patch
-Patch4:		%{name}-link.patch
-Patch5:		%{name}-ffmpeg.patch
-Patch6:		texinfo.patch
-Patch7:		ffmpeg3.patch
-Patch8:		giflib5.patch
-Patch9:		perl.patch
-URL:		http://www.viceteam.org/
+Patch1:		%{name}-fonts.patch
+URL:		http://vice-emu.sourceforge.net/
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	alsa-lib-devel
@@ -38,21 +30,28 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	ffmpeg-devel
+BuildRequires:	flac-devel
 BuildRequires:	flex
-BuildRequires:	gettext-tools
+BuildRequires:	fontconfig-devel
 BuildRequires:	giflib-devel
-BuildRequires:	gtk+2-devel >= 1:2.0
+BuildRequires:	gtk+3-devel
 BuildRequires:	gtkglext-devel
 BuildRequires:	lame-libs-devel
+BuildRequires:	libieee1284-devel
 BuildRequires:	libjpeg-devel
+BuildRequires:	libmpg123-devel
+BuildRequires:	libogg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libvorbis-devel
+BuildRequires:	linux-libc-headers
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
-BuildRequires:	vte0-devel
+BuildRequires:	vte-devel
+BuildRequires:	xa
 BuildRequires:	xorg-app-bdftopcf
 BuildRequires:	xorg-app-mkfontdir
 BuildRequires:	xorg-lib-libX11-devel
@@ -82,18 +81,9 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
 %{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
 
 %build
-%{__gettextize}
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
@@ -102,14 +92,15 @@ cd src/resid
 %{__autoconf}
 cd ../..
 %configure \
+	DOS2UNIX=/usr/bin/dos2unix \
 	--libdir=%{_datadir} \
-	--enable-fullscreen \
-	--enable-gnomeui \
-	--enable-nls \
 	%{?with_pulseaudio:--with-pulse} \
+	--enable-libieee1284 \
+	--enable-native-gtk3ui \
 	--with-sdlsound \
-	--with-x \
-	--without-xaw3d
+	--enable-external-ffmpeg \
+	--enable-ethernet \
+	--with-x
 
 # contains some C++ code included as "old" library (.a), so libtool can't detect it
 %{__make} \
@@ -135,16 +126,8 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}
 install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}
 install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}
 
-cd src/arch/unix/x11
-for i in *icon.c; do
-	install $i $RPM_BUILD_ROOT%{_pixmapsdir}/${i%.c}.xpm
-done
-cd ../../../..
-
 install -d $RPM_BUILD_ROOT%{_fontsdir}/TTF
 mv $RPM_BUILD_ROOT%{_fontsdir}/{misc,TTF}/CBM.ttf
-
-%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -159,7 +142,7 @@ fontpostinst TTF
 fontpostinst misc
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
-%files -f %{name}.lang
+%files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/html
 %attr(755,root,root) %{_bindir}/c1541
@@ -174,19 +157,14 @@ fontpostinst misc
 %attr(755,root,root) %{_bindir}/xcbm5x0
 %attr(755,root,root) %{_bindir}/xpet
 %attr(755,root,root) %{_bindir}/xplus4
+%attr(755,root,root) %{_bindir}/xscpu64
 %attr(755,root,root) %{_bindir}/xvic
 %{_datadir}/vice
 %{_fontsdir}/misc/vice-cbm.bdf
 %{_fontsdir}/TTF/CBM.ttf
+%{_mandir}/man1/cartconv.1*
 %{_mandir}/man1/c1541.1*
 %{_mandir}/man1/petcat.1*
 %{_mandir}/man1/vice.1*
 %{_infodir}/vice.info*
 %{_desktopdir}/vice-*.desktop
-%{_pixmapsdir}/c128icon.xpm
-%{_pixmapsdir}/c64dtvicon.xpm
-%{_pixmapsdir}/c64icon.xpm
-%{_pixmapsdir}/cbm2icon.xpm
-%{_pixmapsdir}/peticon.xpm
-%{_pixmapsdir}/plus4icon.xpm
-%{_pixmapsdir}/vic20icon.xpm
