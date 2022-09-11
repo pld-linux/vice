@@ -91,6 +91,7 @@ pasował do tej linii), CBM-II (C610) oraz Plus4.
 cd src/resid
 %{__autoconf}
 cd ../..
+export CFLAGS="%{rpmcflags} -fcommon"
 %configure \
 	DOS2UNIX=/usr/bin/dos2unix \
 	--libdir=%{_datadir} \
