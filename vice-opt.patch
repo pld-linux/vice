@@ -1,0 +1,17 @@
+--- vice-3.7.1/configure.ac.orig	2022-12-28 00:56:56.000000000 +0100
++++ vice-3.7.1/configure.ac	2023-06-28 16:28:44.575827236 +0200
+@@ -41,10 +41,10 @@ dnl This has to happen before any other
+ 
+ dnl Set VICE's compiler flags (can be overridden by the user)
+ VICE_CPPFLAGS="-I\$(top_srcdir)/src/arch/systemheaderoverride"
+-VICE_CFLAGS="-g -O3"
+-VICE_CXXFLAGS="-g -O3"
+-VICE_OBJCFLAGS="-g -O3"
+-VICE_LDFLAGS=""
++VICE_CFLAGS="$CFLAGS"
++VICE_CXXFLAGS="$CXXFLAGS"
++VICE_OBJCFLAGS="$OBJCFLAGS"
++VICE_LDFLAGS="$LDFLAGS"
+ 
+ dnl Avoid "ar: `u' modifier ignored since `D' is the default (see `U')" warning
+ dnl caused by a longstanding bug in libtool.

@@ -1,19 +1,25 @@
-# TODO
-# - fonts-TTF-CBM subpackage:
-#   %{_fontsdir}/TTF/CBM.ttf
 #
 # Conditional build:
+%bcond_without	ieee1284	# IEEE 1284 (parallel port) support for ParSID
+%bcond_without	openmp		# OpenMP support
 %bcond_without	pulseaudio	# pulseaudio support
+%bcond_with	catweasel	# CatWeasel MK3 (PCI) hardware SID support
+%bcond_with	hardsid		# HardSID (ISA/PCI) hardware SID support
+%bcond_with	parsid		# ParSID (IEEE1284) hardware SID support
+%bcond_with	ssi2001		# SSI2001 (ISA) hardware SID support
 #
+%if %{without parsid}
+%undefine	with_ieee1284
+%endif
 Summary:	Versatile Commodore Emulator
 Summary(pl.UTF-8):	Uniwersalny emulator Commodore
 Name:		vice
-Version:	3.3
-Release:	3
+Version:	3.7.1
+Release:	1
 License:	GPL v2+
 Group:		Applications/Emulators
-Source0:	http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/%{name}-%{version}.tar.gz
-# Source0-md5:	b0797f534b33f638220418207d606cf5
+Source0:	https://downloads.sourceforge.net/vice-emu/%{name}-%{version}.tar.gz
+# Source0-md5:	ffcb48e9b688d14dc5f86de22c30ee32
 Source1:	%{name}-c128.desktop
 Source2:	%{name}-c64.desktop
 Source3:	%{name}-cbm2.desktop
@@ -21,46 +27,50 @@ Source4:	%{name}-pet.desktop
 Source5:	%{name}-plus4.desktop
 Source6:	%{name}-vic20.desktop
 Patch0:		%{name}-info.patch
-Patch1:		%{name}-fonts.patch
-URL:		http://vice-emu.sourceforge.net/
+Patch1:		%{name}-bash.patch
+Patch2:		%{name}-opt.patch
+Patch3:		%{name}-link.patch
+URL:		https://vice-emu.sourceforge.io/
+BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-GLX-devel
-BuildRequires:	SDL-devel >= 1.2.0
+BuildRequires:	SDL2-devel >= 2.0
 BuildRequires:	alsa-lib-devel
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	ffmpeg-devel
+BuildRequires:	ffmpeg-devel < 5
 BuildRequires:	flac-devel
 BuildRequires:	flex
-BuildRequires:	fontconfig-devel
+BuildRequires:	fontconfig-devel >= 2.0.0
 BuildRequires:	giflib-devel
-BuildRequires:	gtk+3-devel
-BuildRequires:	gtkglext-devel
+BuildRequires:	glew-devel
+BuildRequires:	glib2-devel >= 2.0
+BuildRequires:	gtk+3-devel >= 3.22
 BuildRequires:	lame-libs-devel
-BuildRequires:	libieee1284-devel
-BuildRequires:	libjpeg-devel
+%{?with_ieee1284:BuildRequires:	libieee1284-devel}
+%{?with_openmp:BuildRequires:	libgomp-devel}
 BuildRequires:	libmpg123-devel
 BuildRequires:	libogg-devel
+BuildRequires:	libpcap-devel
 BuildRequires:	libpng-devel
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libvorbis-devel
 BuildRequires:	linux-libc-headers
+%if %{with catweasel} || %{with hardsid}
+BuildRequires:	pciutils-devel
+%endif
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
+BuildRequires:	portaudio-devel
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	readline-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	texinfo
-BuildRequires:	vte-devel
 BuildRequires:	xa
-BuildRequires:	xorg-app-bdftopcf
-BuildRequires:	xorg-app-mkfontdir
 BuildRequires:	xorg-lib-libX11-devel
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXrandr-devel
-BuildRequires:	xorg-lib-libXv-devel
-BuildRequires:	xorg-lib-libXxf86dga-devel
-BuildRequires:	xorg-lib-libXxf86vm-devel
-Requires(post,postun):	fontpostinst >= 0.1-6
+BuildRequires:	zlib-devel
+Requires:	fontconfig >= 2.0.0
+Requires:	gtk+3 >= 3.22
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -77,75 +87,85 @@ Aktualna wersja emuluje C64, C128 (wraz z trybem pracy 80 kolumnowym),
 VIC20, wszystkie modele PET (poza SuperPET 9000, który zresztą nie
 pasował do tej linii), CBM-II (C610) oraz Plus4.
 
+%package doc
+Summary:	VICE documentation in HTML format
+Summary(pl.UTF-8):	Dokumentacja do VICE w formacie HTML
+Group:		Documentation
+BuildArch:	noarch
+
+%description doc
+VICE documentation in HTML format.
+
+%description doc -l pl.UTF-8
+Dokumentacja do VICE w formacie HTML.
+
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%{__perl} -i -pe 's@\$\(VICEDIR\)/fonts@%{_fontsdir}/misc@' data/fonts/Makefile.am
+%patch2 -p1
+%patch3 -p1
 
 %build
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-cd src/resid
-%{__autoconf}
-cd ../..
 export CFLAGS="%{rpmcflags} -fcommon"
 %configure \
 	DOS2UNIX=/usr/bin/dos2unix \
-	--libdir=%{_datadir} \
-	%{?with_pulseaudio:--with-pulse} \
-	--enable-libieee1284 \
-	--enable-native-gtk3ui \
-	--with-sdlsound \
-	--enable-external-ffmpeg \
+	%{?with_catweasel:--enable-catweasel} \
 	--enable-ethernet \
-	--with-x
+	--enable-ffmpeg \
+	--enable-gtk3ui \
+	%{!?with_hardsid:--disable-hardsid} \
+	--enable-lame \
+	%{?with_ieee1284:--enable-libieee1284} \
+	--enable-midi \
+	%{!?with_openmp:--disable-openmp} \
+	%{?with_parsid:--enable-parsid} \
+	--disable-pdf-docs \
+	%{?with_ssi2001:--enable-ssi2001} \
+	--enable-x64 \
+	--enable-x64-image \
+	--with-flac \
+	--with-libcurl \
+	--with-mpg123 \
+	--with-oss \
+	%{?with_pulseaudio:--with-pulse} \
+	--with-sdlsound \
+	--with-vorbis
 
-# contains some C++ code included as "old" library (.a), so libtool can't detect it
-%{__make} \
-	CCLD="%{__cxx}"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
+install -d $RPM_BUILD_ROOT%{_desktopdir}
 
-%{__perl} -i -pe 's/SUBDIRS = html\n//' doc/Makefile
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	VICEDIR="%{_datadir}/%{name}"
+	DESTDIR=$RPM_BUILD_ROOT
 
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/vice/doc
-# ?
-#ln -sf %{_docdir}/%{name}-%{version}/html $RPM_BUILD_ROOT%{_datadir}/vice/doc
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}
-
-install -d $RPM_BUILD_ROOT%{_fontsdir}/TTF
-mv $RPM_BUILD_ROOT%{_fontsdir}/{misc,TTF}/CBM.ttf
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/vice/{*.txt,*.md,vice.texi}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-fontpostinst TTF
-fontpostinst misc
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %postun
-fontpostinst TTF
-fontpostinst misc
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FEEDBACK NEWS README doc/iec-bus.txt doc/html
+%doc NEWS README doc/{CIA-README.txt,iec-bus.txt,readmes/Readme-SDL2.txt} doc/html/fonts/OFL.txt
 %attr(755,root,root) %{_bindir}/c1541
 %attr(755,root,root) %{_bindir}/cartconv
 %attr(755,root,root) %{_bindir}/petcat
@@ -161,11 +181,9 @@ fontpostinst misc
 %attr(755,root,root) %{_bindir}/xscpu64
 %attr(755,root,root) %{_bindir}/xvic
 %{_datadir}/vice
-%{_fontsdir}/misc/vice-cbm.bdf
-%{_fontsdir}/TTF/CBM.ttf
-%{_mandir}/man1/cartconv.1*
-%{_mandir}/man1/c1541.1*
-%{_mandir}/man1/petcat.1*
-%{_mandir}/man1/vice.1*
 %{_infodir}/vice.info*
 %{_desktopdir}/vice-*.desktop
+
+%files doc
+%defattr(644,root,root,755)
+%doc doc/html/{fonts,images,*.css,*.html,NEWS,COPYING,favicon.ico,robots.txt}

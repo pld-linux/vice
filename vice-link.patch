@@ -1,0 +1,47 @@
+--- vice-3.7.1/configure.ac.orig	2023-06-28 16:28:44.575827236 +0200
++++ vice-3.7.1/configure.ac	2023-06-28 16:32:02.374755667 +0200
+@@ -2190,8 +2190,11 @@ if test x"$is_unix_x11" = "xyes" -o x"$i
+   if test x"$UNIX_NETWORK_HEADERS_PRESENT" = "xyes"; then
+ 
+     dnl Check for possible extra needed network libraries
++    AC_CHECK_FUNC([dgettext], [], [
+     AC_CHECK_LIB(intl, dgettext,[ NETPLAY_LIBS="-lintl $NETPLAY_LIBS";
+                                   LIBS="-lintl $LIBS"],,)
++    ])
++    AC_CHECK_FUNC([gethostbyname], [], [
+     AC_CHECK_LIB(nsl, gethostbyname,[ NETPLAY_LIBS="-lnsl $NETPLAY_LIBS";
+                                       LIBS="-lnsl $LIBS"],,)
+     AC_CHECK_LIB(socket, gethostbyname,[ NETPLAY_LIBS="-lsocket $NETPLAY_LIBS";
+@@ -2202,6 +2205,7 @@ if test x"$is_unix_x11" = "xyes" -o x"$i
+                                       LIBS="-lnet $LIBS"],,)
+     AC_CHECK_LIB(inet, gethostbyname,[ NETPLAY_LIBS="-linet $NETPLAY_LIBS";
+                                        LIBS="-linet $LIBS"],,)
++    ])
+ 
+     dnl Check for needed functions
+     UNIX_NETWORK_FUNCS_PRESENT=yes
+@@ -2524,8 +2524,10 @@ if test x"$enable_ethernet" = "xyes"; th
+     fi
+   else
+     dnl libpcap.a on Unix
++    AC_CHECK_FUNC([gethostbyname], [], [
+     AC_CHECK_LIB(nsl, gethostbyname,[ LIBS="-lnsl $LIBS" ],,)
+     AC_CHECK_LIB(socket, gethostbyname,[ LIBS="-lsocket $LIBS" ],,)
++    ])
+     AC_CHECK_LIB(pcap, pcap_inject,[
+       AC_DEFINE(HAVE_PCAP,,[Support for PCAP library.])
+       AC_DEFINE(HAVE_RAWNET,,[Support for CS8900A ethernet controller.])
+@@ -3057,11 +3057,13 @@ AC_CHECK_TYPES(off_t,
+ 
+ dnl some platforms have some of the functions in libbsd,
+ dnl so we check it out first.
++AC_CHECK_FUNC([gettimeofday], [], [
+ AC_CHECK_LIB(bsd,gettimeofday,,,$LIBS)
+ 
+ dnl some platforms have some of the functions in libposix,
+ dnl so we check it out second.
+ AC_CHECK_LIB(posix,gettimeofday,,,$LIBS)
++])
+ 
+ AC_CHECK_FUNCS(gettimeofday memmove atexit strerror strcasecmp strncasecmp dirname mkstemp swab getcwd getpwuid random rewinddir strtok strtok_r strtoul snprintf vsnprintf ltoa ultoa stpcpy strlcpy strlwr strrev fseeko ftello _fseeki64 _ftelli64)
+ AC_CHECK_FUNCS(strdup, [have_strdup_func=yes], [have_strdup_func=no])

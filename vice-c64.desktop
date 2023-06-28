@@ -2,7 +2,7 @@
 Name=VICE C64 emulator
 Name[pl]=Emulator C64 VICE
 Icon=c64icon
-Exec=x64
+Exec=x64sc
 Terminal=false
 Type=Application
 Categories=Utility;Emulator;
