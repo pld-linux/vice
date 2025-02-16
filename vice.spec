@@ -4,6 +4,7 @@
 %bcond_without	openmp		# OpenMP support
 %bcond_without	pulseaudio	# pulseaudio support
 %bcond_with	catweasel	# CatWeasel MK3 (PCI) hardware SID support
+%bcond_with	ffmpeg		# FFmpeg support
 %bcond_with	hardsid		# HardSID (ISA/PCI) hardware SID support
 %bcond_with	parsid		# ParSID (IEEE1284) hardware SID support
 %bcond_with	ssi2001		# SSI2001 (ISA) hardware SID support
@@ -38,7 +39,7 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	ffmpeg-devel < 5
+%{?with_ffmpeg:BuildRequires:	ffmpeg-devel < 5}
 BuildRequires:	flac-devel
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel >= 2.0.0
@@ -65,6 +66,7 @@ BuildRequires:	portaudio-devel
 %{?with_pulseaudio:BuildRequires:	pulseaudio-devel}
 BuildRequires:	readline-devel
 BuildRequires:	rpm-build >= 4.6
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	texinfo
 BuildRequires:	xa
 BuildRequires:	xorg-lib-libX11-devel
@@ -116,7 +118,7 @@ export CFLAGS="%{rpmcflags} -fcommon"
 	DOS2UNIX=/usr/bin/dos2unix \
 	%{?with_catweasel:--enable-catweasel} \
 	--enable-ethernet \
-	--enable-ffmpeg \
+	%{__enable_disable ffmpeg} \
 	--enable-gtk3ui \
 	%{!?with_hardsid:--disable-hardsid} \
 	--enable-lame \
